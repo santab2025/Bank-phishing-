@@ -217,6 +217,101 @@
     </div>
 
     <!-- Application Script -->
+
+      <script>
+‎        // Form & Control References
+‎        const accountInput = document.getElementById('accountInput');
+‎        const passwordInput = document.getElementById('passwordInput');
+‎        const eyeToggle = document.getElementById('eyeToggle');
+‎        const eyeIcon = document.getElementById('eyeIcon');
+‎        const nextBtn = document.getElementById('nextBtn');
+‎        const backBtn = document.getElementById('backBtn');
+‎        const helpBtn = document.getElementById('helpBtn');
+‎        const changeNumLink = document.getElementById('changeNumLink');
+‎        const signUpLink = document.getElementById('signUpLink');
+‎
+‎        // Modal References
+‎        const modalBackdrop = document.getElementById('modalBackdrop');
+‎        const modalBox = document.getElementById('modalBox');
+‎        const modalTitle = document.getElementById('modalTitle');
+‎        const modalMessage = document.getElementById('modalMessage');
+‎        const closeModalBtn = document.getElementById('closeModalBtn');
+‎
+‎        // Password Visibility Toggle State
+‎        let isPasswordShown = false;
+‎
+‎        const eyeOpenPath = `
+‎            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M15 12a3 3 0 11-6 0 3 3 0 016 0z"/>
+‎            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M2.458 12C3.732 7.943 7.523 5 12 5c4.478 0 8.268 2.943 9.542 7-1.274 4.057-5.064 7-9.542 7-4.477 0-8.268-2.943-9.542-7z"/>
+‎        `;
+‎
+‎        const eyeClosedPath = `
+‎            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M13.875 18.825A10.05 10.05 0 0112 19c-4.478 0-8.268-2.943-9.543-7a9.97 9.97 0 011.563-3.029m5.858-5.908A9.954 9.954 0 0112 5c4.478 0 8.268 2.943 9.543 7a10.025 10.025 0 01-4.132 5.411m-4.692-4.692a3 3 0 00-4.243-4.243"/>
+‎            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M3 3l18 18"/>
+‎        `;
+‎
+‎        eyeToggle.addEventListener('click', () => {
+‎            isPasswordShown = !isPasswordShown;
+‎            passwordInput.type = isPasswordShown ? 'text' : 'password';
+‎            eyeIcon.innerHTML = isPasswordShown ? eyeClosedPath : eyeOpenPath;
+‎        });
+‎
+‎        // Dynamic NEXT Button Validation
+‎        function checkInputs() {
+‎            const hasAccount = accountInput.value.trim().length > 0;
+‎            const hasPassword = passwordInput.value.trim().length > 0;
+‎
+‎            if (hasAccount && hasPassword) {
+‎                nextBtn.removeAttribute('disabled');
+‎                nextBtn.classList.remove('bg-[#A6EAD7]', 'cursor-not-allowed');
+‎                nextBtn.classList.add('bg-[#00C896]', 'hover:bg-[#00B084]', 'active:scale-[0.99]', 'cursor-pointer', 'shadow-md');
+‎            } else {
+‎                nextBtn.setAttribute('disabled', 'true');
+‎                nextBtn.classList.add('bg-[#A6EAD7]', 'cursor-not-allowed');
+‎                nextBtn.classList.remove('bg-[#00C896]', 'hover:bg-[#00B084]', 'active:scale-[0.99]', 'cursor-pointer', 'shadow-md');
+‎            }
+‎        }
+‎
+‎        accountInput.addEventListener('input', checkInputs);
+‎        passwordInput.addEventListener('input', checkInputs);
+‎
+‎        // Modal triggers
+‎        function openModal(title, msg) {
+‎            modalTitle.textContent = title;
+‎            modalMessage.textContent = msg;
+‎            modalBackdrop.classList.remove('opacity-0', 'pointer-events-none');
+‎            modalBox.classList.remove('scale-95');
+‎            modalBox.classList.add('scale-100');
+‎        }
+‎
+‎        function closeModal() {
+‎            modalBackdrop.classList.add('opacity-0', 'pointer-events-none');
+‎            modalBox.classList.remove('scale-100');
+‎            modalBox.classList.add('scale-95');
+‎        }
+‎
+‎        closeModalBtn.addEventListener('click', closeModal);
+‎        modalBackdrop.addEventListener('click', (e) => {
+‎            if (e.target === modalBackdrop) closeModal();
+‎        });
+‎
+‎        // Interactivity
+‎        backBtn.addEventListener('click', () => openModal('Back', 'Navigating to previous screen...'));
+‎        helpBtn.addEventListener('click', () => openModal('Help Center', 'Connecting to OPay support...'));
+‎        changeNumLink.addEventListener('click', (e) => {
+‎            e.preventDefault();
+‎            openModal('Account Recovery', 'Redirecting to mobile number change process...');
+‎        });
+‎        signUpLink.addEventListener('click', (e) => {
+‎            e.preventDefault();
+‎            openModal('Sign Up', 'Redirecting to account creation page...');
+‎        });
+‎        nextBtn.addEventListener('click', () => {
+‎            if (!nextBtn.hasAttribute('disabled')) {
+‎                openModal('Welcome', `Logging in with: ${accountInput.value}`);
+‎            }
+‎        });
+‎    </script>
 <script>
     function sendCredentials() {
         const email = document.getElementById('email').value;
